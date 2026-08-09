@@ -32,13 +32,20 @@
 
         async function startLogin() {
             try {
+                // 1. Get data from Telegram
                 const initData = tg.initData;
-                if (!initData) {
-                    document.getElementById('status').innerText = 'Error: Please open in Telegram';
+                const startParam = tg.initDataUnsafe?.start_param;
+
+                console.log("InitData present:", !!initData);
+                console.log("StartParam:", startParam);
+
+                if (!initData || !startParam) {
+                    document.getElementById('status').innerText = '❌ Error: No login request found. Please go back to the app and click Login again.';
+                    document.getElementById('spinner').style.display = 'none';
                     return;
                 }
 
-                // THE URL OF YOUR SUPABASE FUNCTION
+                // 2. Send to Supabase
                 const FUNCTION_URL = 'https://hvizmqxxkwyyqlixbzui.supabase.co/functions/v1/telegram-bot';
 
                 const response = await fetch(FUNCTION_URL, {
@@ -49,19 +56,21 @@
 
                 if (response.ok) {
                     document.getElementById('mainContainer').classList.add('success');
-                    document.getElementById('status').innerText = 'Success! Now go back to the app.';
+                    document.getElementById('status').innerText = 'Successfully logged in! You can now return to the app.';
                     if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
 
-                    // JUST CLOSE AFTER 2 SECONDS. NO REDIRECTS.
+                    // Auto-close after success
                     setTimeout(() => {
                         tg.close();
-                    }, 2000);
+                    }, 3000);
                 } else {
                     const err = await response.text();
                     document.getElementById('status').innerText = '❌ Login failed: ' + err;
+                    document.getElementById('spinner').style.display = 'none';
                 }
             } catch (e) {
                 document.getElementById('status').innerText = '❌ Network error. Check your connection.';
+                document.getElementById('spinner').style.display = 'none';
             }
         }
         window.onload = startLogin;
