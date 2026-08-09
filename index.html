@@ -49,10 +49,10 @@
 
                 if (response.ok) {
                     document.getElementById('mainContainer').classList.add('success');
-                    document.getElementById('status').innerText = 'Successfully logged in! Returning to the app...';
+                    document.getElementById('status').innerText = 'Successfully logged in! You can now return to the app.';
                     if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
 
-                    // Wait 3 seconds so the user sees the success, then close
+                    // Auto-close after 3 seconds
                     setTimeout(() => {
                         tg.close();
                     }, 3000);
