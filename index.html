@@ -38,7 +38,7 @@
                     return;
                 }
 
-                // THE CRITICAL FIX: Send data to Supabase, not to GitHub
+                // THE URL OF YOUR SUPABASE FUNCTION
                 const FUNCTION_URL = 'https://hvizmqxxkwyyqlixbzui.supabase.co/functions/v1/telegram-bot';
 
                 const response = await fetch(FUNCTION_URL, {
@@ -49,19 +49,19 @@
 
                 if (response.ok) {
                     document.getElementById('mainContainer').classList.add('success');
-                    document.getElementById('status').innerText = 'Successfully logged in! You can now return to the app.';
+                    document.getElementById('status').innerText = 'Success! Now go back to the app.';
                     if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
 
-                    // Auto-close after 3 seconds
+                    // JUST CLOSE AFTER 2 SECONDS. NO REDIRECTS.
                     setTimeout(() => {
                         tg.close();
-                    }, 3000);
+                    }, 2000);
                 } else {
                     const err = await response.text();
                     document.getElementById('status').innerText = '❌ Login failed: ' + err;
                 }
             } catch (e) {
-                document.getElementById('status').innerText = '❌ Network error';
+                document.getElementById('status').innerText = '❌ Network error. Check your connection.';
             }
         }
         window.onload = startLogin;
