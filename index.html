@@ -10,13 +10,15 @@
         .container { text-align: center; width: 100%; padding: 20px; }
         .spinner { border: 3px solid rgba(0,0,0,0.1); border-top: 3px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .status-text { font-size: 16px; font-weight: 500; color: #2c3e50; }
+        .status-text { font-size: 16px; font-weight: 500; color: #2c3e50; margin-bottom: 20px; }
+        .btn { display: none; padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 8px; font-weight: bold; text-decoration: none; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="spinner"></div>
+        <div class="spinner" id="spinner"></div>
         <div id="status" class="status-text">Logging in to I Made It...</div>
+        <a href="imadeit://login" class="btn" id="returnBtn">Return to App</a>
     </div>
     <script>
         const tg = window.Telegram.WebApp;
@@ -43,7 +45,14 @@
 
                 if (response.ok) {
                     document.getElementById('status').innerText = '✅ Success! Returning to app...';
-                    setTimeout(() => tg.close(), 1000);
+                    document.getElementById('spinner').style.display = 'none';
+                    document.getElementById('returnBtn').style.display = 'inline-block';
+
+                    // Attempt auto-redirect
+                    setTimeout(() => {
+                        window.location.href = "imadeit://login";
+                        setTimeout(() => tg.close(), 1500);
+                    }, 500);
                 } else {
                     const err = await response.text();
                     document.getElementById('status').innerText = '❌ Login failed: ' + err;
