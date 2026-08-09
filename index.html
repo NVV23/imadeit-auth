@@ -46,13 +46,12 @@
                 if (response.ok) {
                     document.getElementById('status').innerText = '✅ Success! Returning to app...';
                     document.getElementById('spinner').style.display = 'none';
-                    document.getElementById('returnBtn').style.display = 'inline-block';
 
-                    // Attempt auto-redirect
+                    // JUST CLOSE THE MINI APP.
+                    // The Android app is already listening for the database change.
                     setTimeout(() => {
-                        window.location.href = "imadeit://login";
-                        setTimeout(() => tg.close(), 1500);
-                    }, 500);
+                        tg.close();
+                    }, 1000);
                 } else {
                     const err = await response.text();
                     document.getElementById('status').innerText = '❌ Login failed: ' + err;
